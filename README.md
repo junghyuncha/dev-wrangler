@@ -104,7 +104,7 @@ No profile selected - ilab will use generic code defaults - these may not be opt
 ## Step 5: 모델 다운로드
 
 ```bash
-ilab model download
+(venv) root@junghyun:~/instructlab# ilab model download
 ```
 
 * 기본으로 instructLab에서 사용되는 모델은 아래와 같습니다.
@@ -152,15 +152,16 @@ source venv/bin/activate
 
 ```bash
 (venv) root@junghyun:~# ilab model chat
-```
-╭─── system  Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help) 
 
->>> what is the capital of south Korea? [S][default]
+╭─── system  Welcome to InstructLab Chat : GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help) 
+
+Q : what is the capital of south Korea? [S][default]
 
 granite-7b-lab-Q4_K_M.gguf 
 
 The capital city of South Korea is Seoul, a vibrant metropolis known for its rich history, bustling culture, and technological advancements. If you have any questions about Seoul or other parts of South Korea, I'd be happy to help! 
 ─── elapsed 10.470 seconds ─╯>>>
+```
 
 ->한국의 수도를 잘 알려줍니다.
 
@@ -235,7 +236,7 @@ document:
 * 파일 작성을 완료하면 ilab taxonomy diff 명령어를 사용하여 검토합니다.
 * 파일 작성에 문제가 없다면 아래와 같이 로그가 출력됩니다.
 ```bash
-ilab taxonomy diff
+(venv) root@junghyun:~/instructlab# ilab taxonomy diff
 ```
 
 결과 예:
@@ -252,7 +253,7 @@ Taxonomy in /root/.local/share/instructlab/taxonomy is valid :)
 * 시간이 조금 소요됩니다.. 저의 경우 ilab config init 시 gpu가 없는 환경인 0 no profile을 선택 하였기 때문에 cpu로 이 데이터를 만드는데 18시간 정도 걸렸습니다.
 
 ```bash
-(myenv) root@junghyun:~/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse# ilab data generate
+(venv) root@junghyun:~/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse# ilab data generate
 INFO 2025-05-27 19:55:32,321 instructlab.process.process:300: Started subprocess with PID 9860. Logs are being written to /root/.local/share/instructlab/logs/generation/generation-1c306fba-3ae9-11f0-b0dd-0b4567577773.log.
 INFO 2025-05-27 19:55:32,622 instructlab.model.backends.llama_cpp:126: Trying to connect to model server at http://127.0.0.1:8000/v1
 llama_new_context_with_model: n_ctx_per_seq (4096) < n_ctx_train (32768) -- the full capacity of the model will not be utilized
@@ -369,7 +370,7 @@ INFO 2025-05-28 13:13:13,659 instructlab.sdg.generate_data:757: Generation took 
 ```
 
 ```bash
-cat knowledge_train_msgs_*.jsonl skills_train_msgs_*.jsonl > combined_train.jsonl
+(venv) root@junghyun:~/instructlab# cat knowledge_train_msgs_*.jsonl skills_train_msgs_*.jsonl > combined_train.jsonl
 ```
 
 
@@ -383,10 +384,10 @@ skills_train_msgs_*.jsonl	: 일반적인 Q&A 형식의 skills 데이터
 knowledge_train_msgs_*.jsonl : knowledge/instruction 유형으로 재구성된 학습 데이터
 
 ```bash
-(myenv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# cat knowledge_train_msgs_2025-05-27T19_55_43.jsonl skills_train_msgs_2025-05-27T19_55_43.jsonl > combined_train.jsonl
-(myenv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# pwd
+(venv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# cat knowledge_train_msgs_2025-05-27T19_55_43.jsonl skills_train_msgs_2025-05-27T19_55_43.jsonl > combined_train.jsonl
+(venv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# pwd
 /root/.local/share/instructlab/datasets/2025-05-27_195532
-(myenv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# ll
+(venv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# ll
 total 2260
 drwxr-xr-x 5 root root   4096 May 28 13:20 ./
 drwxr-xr-x 4 root root   4096 May 27 19:55 ../
@@ -401,7 +402,7 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 -rw-r--r-- 1 root root 705657 May 28 13:13 skills_train_msgs_2025-05-27T19_55_43.jsonl
 -rw-r--r-- 1 root root  86072 May 27 19:57 test_2025-05-27T19_55_43.jsonl
 -rw-r--r-- 1 root root  93802 May 28 13:13 train_2025-05-27T19_55_43.jsonl
-(myenv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# ilab model train --data-path /root/.local/share/instructlab/datasets/2025-05-27_195532/combined_train.jsonl
+(venv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# ilab model train --data-path /root/.local/share/instructlab/datasets/2025-05-27_195532/combined_train.jsonl
 ```
 진행하다가 너무 오래 걸려서 중간에 interrupt 하였습니다..
 
