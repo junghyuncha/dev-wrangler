@@ -425,28 +425,41 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 
 
 1️⃣ ilab data generate
+
 목적 : taxonomy 기반 YAML 파일을 분석해 학습용 .jsonl 데이터 생성
+
 이 단계에서 하는 일 : taxonomy 안의 seed_examples, Q&A 등 분석, instruction-tuned 형식으로 재구성, jsonl 포맷의 학습 데이터 생성 (예: knowledge_train_msgs_*.jsonl)
+
 결과:
 /root/.local/share/instructlab/datasets/2025-05-27_XXXXXX/*.jsonl 생성
 
 
 2️⃣ ilab model train
+
 목적 : 앞에서 생성된 .jsonl 데이터를 이용해 LLM을 미세 조정 (fine-tuning)
+
 이 단계에서 하는 일 : 선택한 모델 (예: mistral, granite 등)을 기반으로 .jsonl 내 문장들을 학습 -> 새로운 체크포인트 생성
+
 결과:
 checkpoints/instructlab-<model-name>/...이 단계는 가장 시간이 오래 걸리는 부분
 
 
 3️⃣ ilab model convert
+
 목적:학습된 모델을 .gguf 포맷으로 변환하여 서빙 가능한 형태로 만들기
+
 이 단계에서 하는 일:checkpoints/에 저장된 모델 파일들을 llama.cpp가 읽을 수 있는 .gguf 포맷으로 변환
+
 결과:
 instructlab-<model-name>-trained/<model-name>.gguf 생성
 
 
-4️⃣ ilab model serve목적: 변환된 .gguf 모델을 로컬 API 서버로 실행
+4️⃣ ilab model serve
+
+목적: 변환된 .gguf 모델을 로컬 API 서버로 실행
+
 이 단계에서 하는 일 : llama.cpp 서버를 실행, /v1/completions 같은 OpenAI API 호환 인터페이스 제공
+
 결과:
 localhost:8000/v1/→ 이제 나만의 fine-tuned LLM에 API 요청을 날릴 수 있게 됨.
 
@@ -455,20 +468,28 @@ localhost:8000/v1/→ 이제 나만의 fine-tuned LLM에 API 요청을 날릴 �
 
 
 ilab data generate 
+
 역할 : 학습용 JSONL 생성
+
 생성물 : .jsonl
 
 
 ilab model train
+
 역할 :모델 미세 조정 (Fine-tuning)
+
 생성물 : checkpoints/
 
 
 ilab model convert
+
 역할 : .gguf 포맷으로 변환
+
 생성물 : *.gguf
 
 
 ilab model serve
+
 역할 : API로 모델 실행
+
 생성물 : OpenAI 호환 서버
