@@ -1,11 +1,10 @@
 # instructLab을 사용하여 nmon Wrangler 만의 LLM 생성
 
 ## 참고 가이드
-
+- 전체적인 과정은 아래 url의 가이드를 참고 하였습니다.
 * [https://docs.instructlab.ai/getting-started/linux\_amd/](https://docs.instructlab.ai/getting-started/linux_amd/)
 * [https://github.com/instructlab/instructlab](https://github.com/instructlab/instructlab)
 
----
 
 ## 개요
 
@@ -15,7 +14,6 @@
 
 * **한계점** : model fine tuning 시 GPU 가 없는 pc를 사용할 경우 시간이 너무 많이 소요됨.
 
----
 
 ## 개발 환경
 
@@ -23,7 +21,6 @@
 * Ubuntu 22.04
 * Python 3.11
 
----
 
 ## Step 1: 가상 환경 생성
 
@@ -32,7 +29,6 @@ python3.11 -m venv myenv
 source myenv/bin/activate
 ```
 
----
 
 ## Step 2: 패키지 설치
 
@@ -43,7 +39,6 @@ sudo apt update
 sudo apt install -y build-essential cmake
 ```
 
----
 
 ## Step 3: instructLab 설치
 
@@ -51,7 +46,6 @@ sudo apt install -y build-essential cmake
 pip install instructlab
 ```
 
----
 
 ## Step 4: instructLab 환경 초기화
 
@@ -106,7 +100,6 @@ No profile selected - ilab will use generic code defaults - these may not be opt
 
 ```
 
----
 
 ## Step 5: 모델 다운로드
 
@@ -114,9 +107,9 @@ No profile selected - ilab will use generic code defaults - these may not be opt
 ilab model download
 ```
 
-* - 기본으로 instructLab에서 사용되는 모델은 아래와 같습니다.
-* - 이 중 flag를 사용하여 특정 모델을 사용할 수 있습니다.
-* - 우리는 instruct를 사용 해야 하기 때문에 mistral-7b-instruct 또는 granite-7b를 사용 하고자 합니다. (7b는 너무 커서 gpu가 없는 환경에서 사용하기에 무리가 있긴 합니다... hugging face에서 양자화 된 모델을 찾아 이를 다운받아 사용 하면 될 것 같습니다. 일단 테스트는 mistral-7b로 진행 중입니다.)
+* 기본으로 instructLab에서 사용되는 모델은 아래와 같습니다.
+* 이 중 flag를 사용하여 특정 모델을 사용할 수 있습니다.
+* 우리는 instruct를 사용 해야 하기 때문에 mistral-7b-instruct 또는 granite-7b를 사용 하고자 합니다. (7b는 너무 커서(파라미터 개수가 너무 많음 70억개) gpu가 없는 환경에서 사용하기에 무리가 있긴 합니다... 그런데 언어모델은 모두 커서.. hugging face에서 양자화 된 모델을 찾아 이를 다운받아 사용 하면 될 것 같습니다. 일단 테스트는 mistral-7b로 진행 중입니다.)
 
 ```bash
 (venv) root@junghyun:~/instructlab# ilab model download
@@ -131,8 +124,6 @@ INFO 2025-05-27 14:53:33,080 instructlab.model.download:302: Available models (`
 +--------------------------------------------
 ```
 
-
----
 
 ## Step 6: 모델 서빙 및 Chat Test
 
@@ -160,36 +151,41 @@ source venv/bin/activate
 ```
 
 ```bash
-(venv) root@junghyun:~# ilab model chat╭─────────────────────────────────────────────────────── system ───────────────────────────────────────────────────────╮│ Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help) │╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯>>> what is the capital of south Korea? [S][default]╭─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── granite-7b-lab-Q4_K_M.gguf ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮│ The capital city of South Korea is Seoul, a vibrant metropolis known for its rich history, bustling culture, and technological advancements. If you have any questions about Seoul or other parts of South Korea, I'd be happy to help! │╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── elapsed 10.470 seconds ─╯>>>
+(venv) root@junghyun:~# ilab model chat
 ```
+╭─── system  Welcome to InstructLab Chat w/ GRANITE-7B-LAB-Q4_K_M.GGUF (type /h for help) 
 
-한국의 수도를 잘 알려줍니다.
+>>> what is the capital of south Korea? [S][default]
+
+granite-7b-lab-Q4_K_M.gguf 
+
+The capital city of South Korea is Seoul, a vibrant metropolis known for its rich history, bustling culture, and technological advancements. If you have any questions about Seoul or other parts of South Korea, I'd be happy to help! 
+─── elapsed 10.470 seconds ─╯>>>
+
+->한국의 수도를 잘 알려줍니다.
 
 
----
 
 ## Step 7: instruction yaml 구성 및 GitHub 업로드
 
-### 7-1: `.md` 문서 작성
-
-* - instructLab은 taxonomy를 사용하여 모델이 학습 하게 될 데이터를 사용합니다. (taxonomy는 모델이 학습하게 될 지식, 기능, 개념들을 계층적으로 구조화한 분류 체계 입니다.)
-* - 다음 과정에서 보시겠지만 ilab data generate 과정을 거쳐 .jsonl 파일을 생성하는데 이때 ~/.local/share/instructlab/taxonomy 디렉토리 경로를 자동 스캔합니다. 그래서 새로운 .yaml 파일이 있는지 검토 합니다.
-* - 이 instruction yaml 파일은 단순한 데이터 파일이 아니라 taxonomy의 leaf node역할을 합니다. 그래서 파일을 작성하는데 나름의 규칙도 있고 꼭 들어 가야 하는 항목이 존재합니다.
-* - 저는 nmon data 중 memuse 항목을 사용하여 데이터를 구성 하였습니다.
+* instructLab은 taxonomy를 사용하여 모델이 학습 하게 될 데이터를 사용합니다. (taxonomy는 모델이 학습하게 될 지식, 기능, 개념들을 계층적으로 구조화한 분류 체계 입니다.)
+* 다음 과정에서 보시겠지만 ilab data generate 과정을 거쳐 .jsonl 파일을 생성하는데 이때 ~/.local/share/instructlab/taxonomy 디렉토리 경로를 자동 스캔합니다. 그래서 새로운 .yaml 파일이 있는지 검토 합니다.
+* 이 instruction yaml 파일은 단순한 데이터 파일이 아니라 taxonomy의 leaf node역할을 합니다. 그래서 파일을 작성하는데 나름의 규칙도 있고 꼭 들어 가야 하는 항목이 존재합니다.
+* 저는 nmon data 중 memuse 항목을 사용하여 데이터를 구성 하였습니다.
 
 ### step 7-1: git 에 repository 생성 후 .md 파일 생성
 https://github.com/junghyuncha/instructlab/blob/main/nmon_memuse.md
 
-memuse 항목에 대한 설명과 간단한 예시, 분석 내용이 담긴 내용입니다.
-저는 memuse에 대해 정리 하였지만 cpuuse, page 등 현재 우리가 수집하는 nmon data에 대해 각각 생성하여 만들어야 합니다.(모델의 학습을 위해)
+* memuse 항목에 대한 설명과 간단한 예시, 분석 내용이 담긴 내용입니다.
+* 저는 memuse에 대해 정리 하였지만 cpuuse, page 등 현재 우리가 수집하는 nmon data에 대해 각각 생성하여 만들어야 합니다.(모델의 학습을 위해)
 
 ### step 7-2: yaml file 작성
-* - 이 yaml file을 사용하여 .jsonl 파일을 생성합니다. (model train을 이 .jsonl 파일을 사용하여 진행하기 때문)
-* - 저는 nmonWrangler 도메인을 사용하였고 파일 위치는 /root/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse/qna.yaml 로 지정 하였습니다.
-* - 파일 작성에는 여러 규칙이 있습니다. 아래 항목이 필드 구문에 맞게 들어가야 합니다.
-    * - domain, created_by, document, seed_examples, context, questions_and_answers, repo(github주소), commit(commit id), patterns(yaml 파일 위치) 
-    * - seed_examples 를 최소 5개 작성
-    * - 각 questions_and_answers 블록에 질문 3개 이상 작성
+* 이 yaml file을 사용하여 .jsonl 파일을 생성합니다. (model train을 이 .jsonl 파일을 사용하여 진행하기 때문)
+* 저는 nmonWrangler 도메인을 사용하였고 파일 위치는 /root/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse/qna.yaml 로 지정 하였습니다.
+* 파일 작성에는 여러 규칙이 있습니다. 아래 항목이 필드 구문에 맞게 들어가야 합니다.
+    * domain, created_by, document, seed_examples, context, questions_and_answers, repo(github주소), commit(commit id), patterns(yaml 파일 위치) 
+    * seed_examples 를 최소 5개 작성
+    * 각 questions_and_answers 블록에 질문 3개 이상 작성
 
 [yaml 파일의 일부]
 
@@ -236,8 +232,8 @@ document:
 ```
 
 ### 7-3: yaml 파일 검토
-* - 파일 작성을 완료하면 ilab taxonomy diff 명령어를 사용하여 검토합니다.
-* - 파일 작성에 문제가 없다면 아래와 같이 로그가 출력됩니다.
+* 파일 작성을 완료하면 ilab taxonomy diff 명령어를 사용하여 검토합니다.
+* 파일 작성에 문제가 없다면 아래와 같이 로그가 출력됩니다.
 ```bash
 ilab taxonomy diff
 ```
@@ -248,13 +244,12 @@ ilab taxonomy diff
 Taxonomy in /root/.local/share/instructlab/taxonomy is valid :)
 ```
 
----
 
 ## Step 8: .jsonl 학습 데이터 생성
 
-* - 모델을 train 시킬때 사용하는 .jsonl 파일을 생성합니다. 
-* - 위에서 만들어 놓은 yaml을 참고하여 생성 하게 됩니다.
-* - 시간이 조금 소요됩니다.. 저의 경우 ilab config init 시 gpu가 없는 환경인 0 no profile을 선택 하였기 때문에 cpu로 이 데이터를 만드는데 18시간 정도 걸렸습니다.
+* 모델을 train 시킬때 사용하는 .jsonl 파일을 생성합니다. 
+* 위에서 만들어 놓은 yaml을 참고하여 생성 하게 됩니다.
+* 시간이 조금 소요됩니다.. 저의 경우 ilab config init 시 gpu가 없는 환경인 0 no profile을 선택 하였기 때문에 cpu로 이 데이터를 만드는데 18시간 정도 걸렸습니다.
 
 ```bash
 (myenv) root@junghyun:~/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse# ilab data generate
@@ -377,12 +372,11 @@ INFO 2025-05-28 13:13:13,659 instructlab.sdg.generate_data:757: Generation took 
 cat knowledge_train_msgs_*.jsonl skills_train_msgs_*.jsonl > combined_train.jsonl
 ```
 
----
 
 ## Step 9: 모델 Fine-tuning
-* - 실제 우리의 memuse 데이터를 사용하여 모델을 Fine-tuning 하는 과정.
-* - 시간이 가장 오래 걸리는 작업.
-* - 위의 과정에서 .jsonl 파일이 두 개가 만들어 져서 이 파일을 합쳐서 train 하는데 사용 하기로 결정.
+* 실제 우리의 memuse 데이터를 사용하여 모델을 Fine-tuning 하는 과정.
+* 시간이 가장 오래 걸리는 작업.
+* 위의 과정에서 .jsonl 파일이 두 개가 만들어 져서 이 파일을 합쳐서 train 하는데 사용 하기로 결정.
 
 생성된 데이터 파일
 skills_train_msgs_*.jsonl	: 일반적인 Q&A 형식의 skills 데이터
@@ -411,7 +405,6 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 ```
 진행하다가 너무 오래 걸려서 중간에 interrupt 하였습니다..
 
----
 
 ## 정리
 
