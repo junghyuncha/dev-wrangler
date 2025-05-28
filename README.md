@@ -410,6 +410,6 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 
 ## 정리
 
-위 과정을 통해 memuse 데이터를 기반으로 nmon 분석 특화 LLM을 생성하였으며, 이 모델을 nmon Wrangler에 통합하여 실 사용에 적합한 분석 기능을 제공할 계획입니다.
+위 과정을 통해 memuse 데이터를 기반으로 nmon 분석 특화 LLM을 생성할 예정이며, 이 모델을 nmon Wrangler에 통합하여 실 사용에 적합한 분석 기능을 제공할 계획입니다.
 
 > 추가 작업: `cpuuse`, `page`, 기타 nmon 항목에 대한 yaml 및 문서도 별도로 작성 필요
