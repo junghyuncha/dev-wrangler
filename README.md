@@ -431,7 +431,6 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 
   * `/root/.local/share/instructlab/datasets/2025-05-27_XXXXXX/*.jsonl` 생성
 
----
 
 ### 2️⃣ ilab model train
 
@@ -445,7 +444,7 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
   * `checkpoints/instructlab-<model-name>/...`
   * ⚠️ 가장 시간이 오래 걸리는 단계
 
----
+
 
 ### 3️⃣ ilab model convert
 
@@ -457,7 +456,7 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 
   * `instructlab-<model-name>-trained/<model-name>.gguf` 생성
 
----
+
 
 ### 4️⃣ ilab model serve
 
@@ -470,7 +469,7 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 
   * `localhost:8000/v1/` → fine-tuned LLM에 API 요청 가능
 
----
+
 
 ## 🔹요약
 
