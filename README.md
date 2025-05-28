@@ -374,11 +374,15 @@ INFO 2025-05-28 13:13:13,659 instructlab.sdg.generate_data:757: Generation took 
 * 시간이 가장 오래 걸리는 작업.
 * 위의 과정에서 .jsonl 파일이 두 개가 만들어 져서 이 파일을 합쳐서 train 하는데 사용 하기로 결정.
 
+
 생성된 데이터 파일
+
+
 skills_train_msgs_*.jsonl	: 일반적인 Q&A 형식의 skills 데이터.
 
 
 knowledge_train_msgs_*.jsonl : knowledge/instruction 유형으로 재구성된 학습 데이터.
+
 
 ```bash
 (venv) root@junghyun:~/.local/share/instructlab/datasets/2025-05-27_195532# cat knowledge_train_msgs_2025-05-27T19_55_43.jsonl skills_train_msgs_2025-05-27T19_55_43.jsonl > combined_train.jsonl
