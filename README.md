@@ -369,11 +369,6 @@ INFO 2025-05-28 13:13:13,659 instructlab.sdg.generate_data:757: Generation took 
 
 ```
 
-```bash
-(venv) root@junghyun:~/instructlab# cat knowledge_train_msgs_*.jsonl skills_train_msgs_*.jsonl > combined_train.jsonl
-```
-
-
 ## Step 9: 모델 Fine-tuning
 * 실제 우리의 memuse 데이터를 사용하여 모델을 Fine-tuning 하는 과정.
 * 시간이 가장 오래 걸리는 작업.
