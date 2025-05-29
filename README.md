@@ -96,6 +96,8 @@ No profile selected - ilab will use generic code defaults - these may not be opt
     Initialization completed successfully!
   You're ready to start using `ilab`. Enjoy!
 --------------------------------------------
+
+# 구성된 환경 확인
 (venv) root@junghyun:~/instructlab# ilab config show
 
 ```
@@ -109,7 +111,7 @@ No profile selected - ilab will use generic code defaults - these may not be opt
 
 * 기본으로 instructLab에서 사용되는 모델은 아래와 같습니다.
 * 이 중 flag를 사용하여 특정 모델을 사용할 수 있습니다.
-* 우리는 instruct를 사용 해야 하기 때문에 mistral-7b-instruct 또는 granite-7b를 사용 하고자 합니다. (7b는 너무 커서(파라미터 개수가 너무 많음 70억개) gpu가 없는 환경에서 사용하기에 무리가 있긴 합니다... 그런데 언어모델은 모두 커서.. hugging face에서 양자화 된 모델을 찾아 이를 다운받아 사용 하면 될 것 같습니다. 일단 테스트는 mistral-7b로 진행 중입니다.)
+* IBM의 granite를 사용 하려면 아래 list 중 granite-7b-lab-Q4_K_M.gguf 를 사용 하면 되는데 이 모델은 granite-7b-lab 모델을 양자화 시킨 모델입니다. (base는 granite-7b-base, 이를 fine-tuned 시킨 모델이 granite-7b-lab)
 
 ```bash
 (venv) root@junghyun:~/instructlab# ilab model download
@@ -121,7 +123,7 @@ INFO 2025-05-27 14:53:33,080 instructlab.model.download:302: Available models (`
 | merlinite-7b-lab-Q4_K_M.gguf               | 2025-05-27 14:51:59 | 4.1 GB   | /root/.cache/instructlab/models/merlinite-7b-lab-Q4_K_M.gguf         |
 | ibm-granite/granite-embedding-125m-english | 2025-05-27 14:53:33 | 479.2 MB | /root/.cache/instructlab/models/ibm-granite                          |
 | granite-7b-lab-Q4_K_M.gguf                 | 2025-05-27 14:50:42 | 3.8 GB   | /root/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf           |
-+--------------------------------------------
++--------------------------------------------+-------------------------------------------------------------------------------------------------------+
 ```
 
 
@@ -130,12 +132,13 @@ INFO 2025-05-27 14:53:33,080 instructlab.model.download:302: Available models (`
 모델 선택. (granite-7b-lab-Q4_K_M.gguf)
 ```bash
 (venv) root@junghyun:~/instructlab# ilab model serve --model-path /root/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf
+
 INFO 2025-05-27 15:35:12,095 instructlab.model.serve_backend:80: Setting backend_type in the serve config to llama-cpp
 INFO 2025-05-27 15:35:12,108 instructlab.model.serve_backend:86: Using model '/root/.cache/instructlab/models/granite-7b-lab-Q4_K_M.gguf' with -1 gpu-layers and 4096 max context size.llama_new_context_with_model: n_ctx_pre_seq (4096) > n_ctx_train (2048) -- possible training context overflowINFO 2025-05-27 15:35:20,380 instructlab.model.backends.llama_cpp:306: Replacing chat template: {% set eos_token = "<|endoftext|>" %}{% set bos_token = "<|begginingoftext|>" %}{% for message in messages %}{% if message['role'] == 'pretraining' %}{{'<|pretrain|>' + message['content'] + '<|endoftext|>' + '<|/pretrain|>' }}{% elif message['role'] == 'system' %}{{'<|system|>'+ '' + message['content'] + ''}}{% elif message['role'] == 'user' %}{{'<|user|>' + '' + message['content'] + ''}}{% elif message['role'] == 'assistant' %}{{'<|assistant|>' + '' + message['content'] + '<|endoftext|>' + ('' if loop.last else '')}}{% endif %}{% if loop.last and add_generation_prompt %}{{ '<|assistant|>' + '' }}{% endif %}{% endfor %}
 INFO 2025-05-27 15:35:20,388 instructlab.model.backends.llama_cpp:233: Starting server process, press CTRL+C to shutdown server...INFO 2025-05-27 15:35:20,389 instructlab.model.backends.llama_cpp:234: After application startup complete see http://127.0.0.1:8000/docs for API.
 ```
 
-------------새로운 터미널 오픈------------
+------------------------------------새로운 터미널 오픈------------------------------------
 
 ```bash
 wsl
@@ -163,7 +166,7 @@ The capital city of South Korea is Seoul, a vibrant metropolis known for its ric
 ─── elapsed 10.470 seconds ─╯>>>
 ```
 
-->한국의 수도를 잘 알려줍니다.
+-> 한국의 수도를 잘 알려줍니다.
 
 
 
@@ -172,7 +175,7 @@ The capital city of South Korea is Seoul, a vibrant metropolis known for its ric
 * instructLab은 taxonomy를 사용하여 모델이 학습 하게 될 데이터를 사용합니다. (taxonomy는 모델이 학습하게 될 지식, 기능, 개념들을 계층적으로 구조화한 분류 체계 입니다.)
 * 다음 과정에서 보시겠지만 ilab data generate 과정을 거쳐 .jsonl 파일을 생성하는데 이때 ~/.local/share/instructlab/taxonomy 디렉토리 경로를 자동 스캔합니다. 그래서 새로운 .yaml 파일이 있는지 검토 합니다.
 * 이 instruction yaml 파일은 단순한 데이터 파일이 아니라 taxonomy의 leaf node역할을 합니다. 그래서 파일을 작성하는데 나름의 규칙도 있고 꼭 들어 가야 하는 항목이 존재합니다.
-* 저는 nmon data 중 memuse 항목을 사용하여 데이터를 구성 하였습니다.
+* 저는 nmon data 중 memuse 항목을 사용하여 데이터를 구성 하였습니다. (앞으로 memory category 뿐만 아니라 다른 영역의 데이터도 넣어서 모델을 학습 시켜야 합니다.)
 
 ### step 7-1: git 에 repository 생성 후 .md 파일 생성
 https://github.com/junghyuncha/instructlab/blob/main/nmon_memuse.md
@@ -183,7 +186,7 @@ https://github.com/junghyuncha/instructlab/blob/main/nmon_memuse.md
 ### step 7-2: yaml file 작성
 * 이 yaml file을 사용하여 .jsonl 파일을 생성합니다. (model train을 이 .jsonl 파일을 사용하여 진행하기 때문)
 * 저는 nmonWrangler 도메인을 사용하였고 파일 위치는 /root/.local/share/instructlab/taxonomy/knowledge/nmonWrangler/collections/memuse/qna.yaml 로 지정 하였습니다.
-* 파일 작성에는 여러 규칙이 있습니다. 아래 항목이 필드 구문에 맞게 들어가야 합니다.
+* 파일 작성에는 여러 규칙이 있습니다. 아래 항목이 필드 구문에 맞게 들어가야 합니다. 하나라도 규칙에 맞지 않으면 파일을 생성 하지 못합니다.
     * domain, created_by, document, seed_examples, context, questions_and_answers, repo(github주소), commit(commit id), patterns(yaml 파일 위치) 
     * seed_examples 를 최소 5개 작성
     * 각 questions_and_answers 블록에 질문 3개 이상 작성
@@ -197,11 +200,11 @@ created_by: junghyun
 seed_examples:
   - context: |
       The following is a snapshot of the `memuse` section from an AIX system collected using nmon:
-      - %numperm: 91.2
-      - %minperm: 3.0
-      - %maxperm: 90.0
-      - %numclient: 92.5
-      - %maxclient: 90.0
+      - '%numperm': 91.2
+      - '%minperm': 3.0
+      - '%maxperm': 90.0
+      - '%numclient': 92.5
+      - '%maxclient': 90.0
       - minfree: 960
       - maxfree: 1088
       - lruable pages: 130171072
@@ -211,12 +214,12 @@ seed_examples:
       - question: |
           What problems are indicated by this memuse data?
         answer: |
-          Both %numperm and %numclient exceed their respective %maxperm and %maxclient thresholds. This suggests that the file system and applications are overusing cache memory, which could lead to page stealing and system performance degradation. You should consider tuning cache settings or increasing physical memory.
+          Both %numperm and '%numclient' exceed their respective '%maxperm' and '%maxclient' thresholds. This suggests that the file system and applications are overusing cache memory, which could lead to page stealing and system performance degradation. You should consider tuning cache settings or increasing physical memory.
 
       - question: |
           What does the %numperm field represent?
         answer: |
-          %numperm indicates the percentage of memory used by the persistent file system cache. It is recommended to keep this value below %maxperm to avoid I/O bottlenecks and page stealing issues.
+          %numperm indicates the percentage of memory used by the persistent file system cache. It is recommended to keep this value below '%maxperm' to avoid I/O bottlenecks and page stealing issues.
 
       - question: |
           What configuration or tuning can be done to improve this?
@@ -235,6 +238,7 @@ document:
 ### 7-3: yaml 파일 검토
 * 파일 작성을 완료하면 ilab taxonomy diff 명령어를 사용하여 검토합니다.
 * 파일 작성에 문제가 없다면 아래와 같이 로그가 출력됩니다.
+
 ```bash
 (venv) root@junghyun:~/instructlab# ilab taxonomy diff
 ```
@@ -299,7 +303,7 @@ gen_spellcheck Prompt Generation:   0%|          | 0/35 [00:00<?, ?it/s]/root/my
   warnings.warn(
 gen_spellcheck Prompt Generation:  23%|##2       | 8/35 [03:35<12:04, 26.83s/it]
 
-
+...
 
 Filter (num_proc=8): 100%|##########| 453/453 [00:00<00:00, 2176.96 examples/s]
 INFO 2025-05-28 10:26:20,576 instructlab.sdg.pipeline:199: Running block: eval_relevancy_qa_pair
@@ -375,13 +379,12 @@ INFO 2025-05-28 13:13:13,659 instructlab.sdg.generate_data:757: Generation took 
 * 위의 과정에서 .jsonl 파일이 두 개가 만들어 져서 이 파일을 합쳐서 train 하는데 사용 하기로 결정.
 
 
-생성된 데이터 파일
+🔹생성된 데이터 파일
 
-
-skills_train_msgs_*.jsonl	: 일반적인 Q&A 형식의 skills 데이터.
-
-
-knowledge_train_msgs_*.jsonl : knowledge/instruction 유형으로 재구성된 학습 데이터.
+| 파일명                       |     설명                     |
+| -------------------------- | --------------------------- | 
+| `skills_train_msgs_*.jsonl` | 일반적인 Q&A 형식의 skills 데이터.|
+| `knowledge_train_msgs_*.jsonl` | knowledge/instruction 유형으로 재구성된 학습 데이터.|
 
 
 ```bash
