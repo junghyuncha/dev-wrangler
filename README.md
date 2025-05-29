@@ -411,14 +411,15 @@ drwxr-xr-x 3 root root   4096 May 27 19:57 preprocessed_2025-05-27T19_55_43/
 진행하다가 너무 오래 걸려서 중간에 interrupt 하였습니다..
 
 
-다시 시도 예정이며 ilab config init 과정에서 rtx3070 8gb gpu가 설치 된 pc, granite-7B가 아닌 양자화 된 모델을 사용하여 진행 해 볼 계획입니다.
+다시 시도 예정이며 ilab config init 과정에서 rtx3070 8gb gpu가 설치 된 pc를 사용하여 진행 해 볼 계획입니다. (사양이 아무래도 너무 낮아서 빠른 시간 안에 학습이 될지 의문입니다.)
 
 
 ## 정리
 
 위 과정을 통해 memuse 데이터를 기반으로 nmon 분석 특화 LLM을 생성할 예정이며, 이 모델을 nmon Wrangler에 통합하여 실 사용에 적합한 분석 기능을 제공할 계획입니다.
 
-> 추가 작업: `cpuuse`, `page`, 기타 nmon 항목에 대한 yaml 및 문서도 별도로 작성 필요
+> 추가 작업 1 : `cpuuse`, `page`, 기타 nmon 항목에 대한 yaml 및 문서도 별도로 작성 필요
+> 추가 작업 2 : 실제 nmon Wrangler code에 hugging face model을 넣고 먼저 테스트 필요.(program download 만으로 기능 사용이 되는지 확인)
 
 
 ## 이후 과정
