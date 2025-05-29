@@ -4,6 +4,8 @@
 - 전체적인 과정은 아래 url의 가이드를 참고 하였습니다.
 * [https://docs.instructlab.ai/getting-started/linux\_amd/](https://docs.instructlab.ai/getting-started/linux_amd/)
 * [https://github.com/instructlab/instructlab](https://github.com/instructlab/instructlab)
+* [https://github.com/instructlab/taxonomy](https://github.com/instructlab/taxonomy)
+* [https://developers.redhat.com/blog/2024/06/12/getting-started-instructlab-generative-ai-model-tuning#](https://developers.redhat.com/blog/2024/06/12/getting-started-instructlab-generative-ai-model-tuning#)
 
 
 ## 개요
