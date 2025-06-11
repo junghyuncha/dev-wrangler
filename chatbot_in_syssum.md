@@ -5,7 +5,7 @@
 * [1] pip package 설치
 * [2] llm/llm_func.py 추가
 * [3] routes/chat.py 추가
-* [4] app/__init__.py 수정
+* [4] `app/__init__.py` 수정
 * [5] app/templates/contents/sys_summ.html 수정
 * [6] nmon-wrangler.py 수정
 
@@ -13,7 +13,6 @@
 /nmonwrangler/
 ├── app/
 │   ├── routes/
-│   │   ├── __init__.py
 │   │   └── chat.py
 │   ├── templates/
 │   │   └── contents/
