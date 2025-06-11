@@ -3,11 +3,11 @@
 ## 목차
 
 * [1] pip package 설치
-* [2] llm/llm_func.py 추가
-* [3] routes/chat.py 추가
+* [2] `llm/llm_func.py` 추가
+* [3] `routes/chat.py` 추가
 * [4] `app/__init__.py` 수정
-* [5] app/templates/contents/sys_summ.html 수정
-* [6] nmon-wrangler.py 수정
+* [5] `app/templates/contents/sys_summ.html` 수정
+* [6] `nmon-wrangler.py` 수정
 
 ```bash
 /nmonwrangler/
@@ -64,7 +64,7 @@ zipp                      3.17.0
 - model download(hugging face에서 download 하였습니다. .gguf 당 4GB)
 - model 을 flask에서 사용 할 수 있도록 driver download(llama-cpp-python 라이브러리를 사용하여 Flask 애플리케이션에서 모델을 호출하는 API를 만들기)
 - 목적 : LLM 관련 로직 분리 (모델 로딩 및 ask_llm() 함수 등)
-- llm_func.py 파일에 아래 코드 추가
+- `llm_func.py` 파일에 아래 코드 추가
 
 ```python
 from llama_cpp import Llama
@@ -93,7 +93,7 @@ class llm():
 * **[3] routes/chat.py 추가**
 - chat.py: /chat 엔드포인트를 정의하여 사용자의 질문을 받아 모델의 응답을 생성
 - 모델의 설치 위치를 명시해야함.(local에 model이 설치 되어 있어야함.)
-- chat.py 파일에 아래 코드 추가
+- `chat.py` 파일에 아래 코드 추가
 
 ```python
 from flask import Blueprint, request, jsonify
@@ -126,7 +126,7 @@ def chat():
 ```
 
 * **[4] app/__init__.py 수정**
-- __init__.py 파일에 아래 코드 추가
+- `__init__.py` 파일에 아래 코드 추가
 
 ```python
 ...
@@ -141,7 +141,7 @@ def create_app():
 
 * **[5] app/templates/contents/sys_summ.html 수정**
 - chatbot의 말풍선 색, 위치 등 설정
-- sys_summ.html 파일에 아래 코드 추가
+- `sys_summ.html` 파일에 아래 코드 추가
 
 ```html
 ...
@@ -278,8 +278,8 @@ def create_app():
 ```
 
 * **[6] nmon-wrangler.py 수정**
-- nmon_wrangler.py 파일에 아래 코드 추가
-- 모두 추가 후 nmon_wrangler.py에서 run 하여 chatbot 테스트 진행
+- `nmon_wrangler.py` 파일에 아래 코드 추가
+- 모두 추가 후 `nmon_wrangler.py`에서 run 하여 chatbot 테스트 진행
 
 ```python
 ...
